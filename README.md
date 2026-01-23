@@ -84,5 +84,5 @@ Example:
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone <repository-url>
-cd emergency-response-mvp
+git clone git@github.com:Avad05/Safe-Walk.git
+cd Safe-Walk
