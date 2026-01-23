@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Custom styling for vehicle popups */
+.leaflet-popup-content-wrapper {
+  padding: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+}
+
+.leaflet-popup-tip {
+  background: white !important;
+}
+
+/* Remove default popup close button styling if needed */
+.leaflet-popup-close-button {
+  font-size: 20px !important;
+  padding: 4px 8px !important;
+}
+
+/* Custom icon positioning */
+.custom-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+}
+
+/* Ensure buttons work properly in popup */
+.leaflet-popup-content button {
+  transition: all 0.2s ease;
+}
+
+.leaflet-popup-content button:active {
+  transform: scale(0.95);
+}
