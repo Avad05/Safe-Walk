@@ -10,8 +10,8 @@ const vehicles = [
   { 
     id: 1, 
     type: 'Ambulance', 
-    lat: 19.0760, 
-    lng: 72.8777, 
+    lat: 19.116472, 
+    lng: 73.006858, 
     status: 'Available',
     contactNumber: '+91 98765 43210',
     operatorName: 'Dr. Rajesh Kumar',
