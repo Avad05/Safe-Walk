@@ -114,6 +114,14 @@ router.patch('/:id', isAuthenticated, (req, res) => {
 router.post('/', upload.single('image'), (req, res) => {
   try {
     const { type, description, location, phoneNumber } = req.body;
+
+    //logged for phone
+    console.log('Received incident data:', {
+      type,
+      description,
+      location,
+      phoneNumber
+    });
     
     if (!type || !description || !location || !phoneNumber) {
       return res.status(400).json({ error: 'Missing required fields' });
