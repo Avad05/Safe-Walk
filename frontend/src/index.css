@@ -55,7 +55,7 @@ body {
 
 /* Ensure buttons work properly in popup */
 .leaflet-popup-content button {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .leaflet-popup-content button:active {
