@@ -76,7 +76,7 @@ Example:
 
 - **Frontend:** HTML / CSS / JavaScript (or basic React)
 - **Backend:** Node.js + Express *(or Python Flask)*
-- **Database:** In-memory storage or SQLite
+- **Database:** In-memory storage
 
 ---
 
