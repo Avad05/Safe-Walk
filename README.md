@@ -74,8 +74,8 @@ Example:
 
 ## ⚙️ Tech Stack
 
-- **Frontend:** HTML / CSS / JavaScript (or basic React)
-- **Backend:** Node.js + Express *(or Python Flask)*
+- **Frontend:** HTML / CSS / JavaScript / React.js
+- **Backend:** Node.js + Express 
 - **Database:** In-memory storage
 
 ---
