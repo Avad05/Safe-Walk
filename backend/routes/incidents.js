@@ -3,7 +3,8 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { isAuthenticated } from '../middleware/auth.js';
-import { generateAIAnalysis } from '../services/aiMock.js';
+// import { generateAIAnalysis } from '../services/aiMock.js';
+import { generateAIAnalysis } from '../services/aiGemini.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,23 +43,33 @@ let incidents = [];
 let incidentIdCounter = 1;
 
 // POST /api/incidents - Create new incident (public)
-router.post('/', upload.single('image'), (req, res) => {
+// POST /api/incidents - Create new incident (public)
+router.post('/', upload.single('image'), async (req, res) => { // Added async
   try {
-    const { type, description, location } = req.body;
+    const { type, description, location, phoneNumber } = req.body;
     
-    if (!type || !description || !location) {
+    if (!type || !description || !location || !phoneNumber) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
+    
+    // Validate phone number (10 digits)
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      return res.status(400).json({ error: 'Phone number must be exactly 10 digits' });
+    }
+
+    // Generate AI analysis (now async)
+    const aiAnalysis = await generateAIAnalysis(type, description, location, phoneNumber);
     
     const incident = {
       id: incidentIdCounter++,
       type,
       description,
       location,
+      phoneNumber,
       image: req.file ? `/uploads/${req.file.filename}` : null,
       status: 'pending',
       createdAt: new Date().toISOString(),
-      aiAnalysis: generateAIAnalysis(type, description)
+      aiAnalysis // AI-powered analysis
     };
     
     incidents.push(incident);
