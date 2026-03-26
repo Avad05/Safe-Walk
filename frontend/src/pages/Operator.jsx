@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 import IncidentCard from '../components/IncidentCard';
 import MapView from '../components/MapView';
 import AIPanel from '../components/AIPanel';
@@ -30,7 +31,7 @@ const Operator = () => {
 
   const checkAuth = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/auth/check', {
+      const response = await axios.get(`${API_BASE_URL}/api/auth/check`, {
         withCredentials: true
       });
       if (response.data.authenticated) {
@@ -47,7 +48,7 @@ const Operator = () => {
 
   const fetchIncidents = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/incidents', {
+      const response = await axios.get(`${API_BASE_URL}/api/incidents`, {
         withCredentials: true
       });
       setIncidents(response.data);
@@ -58,7 +59,7 @@ const Operator = () => {
 
   const fetchVehicles = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/vehicles', {
+      const response = await axios.get(`${API_BASE_URL}/api/vehicles`, {
         withCredentials: true
       });
       setVehicles(response.data);
@@ -70,7 +71,7 @@ const Operator = () => {
   const handleStatusUpdate = async (incidentId, newStatus) => {
     try {
       await axios.patch(
-        `http://localhost:3001/api/incidents/${incidentId}`,
+        `${API_BASE_URL}/api/incidents/${incidentId}`,
         { status: newStatus },
         { withCredentials: true }
       );
@@ -85,7 +86,7 @@ const Operator = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:3001/api/auth/logout', {}, {
+      await axios.post(`${API_BASE_URL}/api/auth/logout`, {}, {
         withCredentials: true
       });
       navigate('/login');

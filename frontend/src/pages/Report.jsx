@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 const Report = () => {
   const [formData, setFormData] = useState({
@@ -205,7 +206,7 @@ const Report = () => {
         submitData.append('image', image);
       }
 
-      await axios.post('http://localhost:3001/api/incidents', submitData, {
+      await axios.post(`${API_BASE_URL}/api/incidents`, submitData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 

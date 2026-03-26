@@ -31,7 +31,7 @@ if (!fs.existsSync(uploadsDir)) {
 // Middleware
 app.use(cors({
   origin: ['http://localhost:3000',
-    'https://emergency-response-frontend.onrender.com/report'
+    'https://emergency-response-frontend.onrender.com'
   ],
   credentials: true
 }));
@@ -39,13 +39,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
+// Trust proxy (required for Render and similar platforms)
+app.set('trust proxy', 1);
+
 // Session configuration
 app.use(session({
   secret: 'emergency-response-secret-key',
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: false, // Set to true in production with HTTPS
+    secure: process.env.NODE_ENV === 'production', // true in production (HTTPS)
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // required for cross-origin cookies
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
@@ -124,5 +128,5 @@ app.get('/api/health', (req, res) => {
 });
 
 app.listen(process.env.PORT, () => {
-  console.log(`🚨 Emergency Response Backend running on 1000`);
+  console.log(`🚨 Emergency Response Backend running on this`);
 });
