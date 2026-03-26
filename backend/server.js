@@ -30,7 +30,9 @@ if (!fs.existsSync(uploadsDir)) {
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000',
+    'https://emergency-response-frontend.onrender.com'
+  ],
   credentials: true
 }));
 app.use(express.json());
