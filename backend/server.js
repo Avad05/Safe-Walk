@@ -10,6 +10,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import { supabase } from './config/supabase.js';
 
 import authRoutes from './routes/auth.js';
 import incidentRoutes from './routes/incidents.js';
@@ -64,17 +65,28 @@ const users = [
 // Passport Local Strategy
 passport.use(new LocalStrategy(
   async (username, password, done) => {
-    const user = users.find(u => u.username === username);
-    if (!user) {
-      return done(null, false, { message: 'Incorrect username' });
+    try {
+      const { data: users, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', username)
+        .limit(1);
+
+      if (error || !users || users.length === 0) {
+        return done(null, false, { message: 'Incorrect username' });
+      }
+
+      const user = users[0];
+      const isValid = await bcrypt.compare(password, user.password);
+      
+      if (!isValid) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
+      
+      return done(null, user);
+    } catch (error) {
+      return done(error);
     }
-    
-    const isValid = await bcrypt.compare(password, user.password);
-    if (!isValid) {
-      return done(null, false, { message: 'Incorrect password' });
-    }
-    
-    return done(null, user);
   }
 ));
 
@@ -82,9 +94,21 @@ passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  const user = users.find(u => u.id === id);
-  done(null, user);
+passport.deserializeUser(async (id, done) => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      return done(error);
+    }
+    done(null, data);
+  } catch (error) {
+    done(error);
+  }
 });
 
 // Routes

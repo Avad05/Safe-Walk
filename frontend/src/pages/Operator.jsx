@@ -225,7 +225,7 @@ const Operator = () => {
                   <div>
                     <p className="text-sm text-gray-600 font-semibold mb-2">Photo Evidence</p>
                     <img
-                      src={`http://localhost:3001${selectedIncident.image}`}
+                      src={selectedIncident.image}
                       alt="Incident"
                       className="w-full h-64 object-cover rounded-lg"
                     />
