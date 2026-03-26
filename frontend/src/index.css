@@ -26,7 +26,7 @@ body {
 .leaflet-popup-content-wrapper {
   padding: 0 !important;
   border-radius: 12px !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
 }
 
 .leaflet-popup-content {
@@ -55,7 +55,7 @@ body {
 
 /* Ensure buttons work properly in popup */
 .leaflet-popup-content button {
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .leaflet-popup-content button:active {
