@@ -121,6 +121,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚨 Emergency Response Backend running on http://localhost:${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log(`🚨 Emergency Response Backend running on 1000`);
 });
