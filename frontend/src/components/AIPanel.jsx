@@ -1,116 +1,102 @@
 import React from 'react';
 
 const AIPanel = ({ analysis }) => {
+  if (!analysis) return null;
+
   const severityConfig = {
     High: {
-      color: 'border-red-500 bg-red-50',
-      textColor: 'text-red-800',
-      icon: '🔴',
-      bgGradient: 'from-red-50 to-pink-50'
+      bar: 'bg-red-500',
+      badge: 'bg-red-500/20 text-red-400 border-red-500/30',
+      glow: 'shadow-red-500/10',
     },
     Medium: {
-      color: 'border-yellow-500 bg-yellow-50',
-      textColor: 'text-yellow-800',
-      icon: '🟡',
-      bgGradient: 'from-yellow-50 to-orange-50'
+      bar: 'bg-amber-500',
+      badge: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+      glow: 'shadow-amber-500/10',
     },
     Low: {
-      color: 'border-green-500 bg-green-50',
-      textColor: 'text-green-800',
-      icon: '🟢',
-      bgGradient: 'from-green-50 to-emerald-50'
+      bar: 'bg-emerald-500',
+      badge: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+      glow: 'shadow-emerald-500/10',
     }
   };
 
-  const config = severityConfig[analysis.severity];
+  const config = severityConfig[analysis.severity] || severityConfig.Medium;
 
   return (
-    <div className={`bg-gradient-to-br ${config.bgGradient} rounded-2xl shadow-lg p-6 border-2 ${config.color}`}>
-      <div className="flex items-center gap-3 mb-4">
-        <span className="text-3xl">🤖</span>
-        <div className="flex-1">
-          <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-            AI Analysis
-            {analysis.aiPowered && (
-              <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full border border-purple-300">
-                ✨ Gemini Powered
-              </span>
-            )}
-          </h3>
-          <p className="text-xs text-gray-500">
-            Analyzed at {new Date(analysis.analyzedAt).toLocaleTimeString()}
-          </p>
+    <div className={`bg-slate-800 rounded-xl border border-slate-700 overflow-hidden ${config.glow} shadow-lg`}>
+      {/* Header */}
+      <div className="px-5 py-3.5 border-b border-slate-700 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">🤖</span>
+          <h3 className="font-semibold text-slate-100 text-sm">AI Analysis</h3>
+          {analysis.aiPowered && (
+            <span className="text-[10px] bg-violet-500/20 text-violet-400 border border-violet-500/30 px-2 py-0.5 rounded-full font-medium">
+              Gemini
+            </span>
+          )}
         </div>
+        <span className="text-[10px] text-slate-500">
+          {new Date(analysis.analyzedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </span>
       </div>
 
-      <div className="space-y-4">
-        {/* Severity */}
-        <div className={`border-2 ${config.color} rounded-xl p-4`}>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-gray-600 font-semibold mb-1">Severity Level</p>
-              <p className={`text-2xl font-bold ${config.textColor} flex items-center gap-2`}>
-                <span>{config.icon}</span>
-                {analysis.severity}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-600 font-semibold mb-1">Urgency Score</p>
-              <p className="text-2xl font-bold text-gray-800">
-                {analysis.estimatedUrgency}/10
-              </p>
+      <div className="p-5 space-y-4">
+        {/* Metrics Row */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="bg-slate-900/60 rounded-lg p-3">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Severity</p>
+            <span className={`text-xs px-2 py-1 rounded border font-semibold ${config.badge}`}>
+              {analysis.severity}
+            </span>
+          </div>
+          <div className="bg-slate-900/60 rounded-lg p-3">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Urgency</p>
+            <p className="text-lg font-bold text-slate-100">{analysis.estimatedUrgency}<span className="text-slate-500 text-xs">/10</span></p>
+          </div>
+          <div className="bg-slate-900/60 rounded-lg p-3">
+            <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Confidence</p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg font-bold text-slate-100">{analysis.confidence}<span className="text-slate-500 text-xs">%</span></p>
             </div>
           </div>
         </div>
 
-        {/* Confidence */}
-        <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm text-gray-600 font-semibold">AI Confidence</p>
-            <p className="text-sm font-bold text-gray-800">{analysis.confidence}%</p>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-3">
-            <div 
-              className={`h-3 rounded-full transition-all ${
-                analysis.confidence >= 80 ? 'bg-green-500' :
-                analysis.confidence >= 60 ? 'bg-yellow-500' :
-                'bg-red-500'
-              }`}
-              style={{ width: `${analysis.confidence}%` }}
-            ></div>
-          </div>
+        {/* Confidence Bar */}
+        <div className="w-full bg-slate-700 rounded-full h-1.5">
+          <div
+            className={`h-1.5 rounded-full transition-all ${config.bar}`}
+            style={{ width: `${analysis.confidence}%` }}
+          ></div>
         </div>
 
         {/* Summary */}
-        <div className="bg-white rounded-xl p-4 border-2 border-gray-200">
-          <p className="text-sm text-gray-600 font-semibold mb-2">AI Summary</p>
-          <p className="text-gray-800 leading-relaxed">{analysis.summary}</p>
+        <div>
+          <p className="text-[10px] text-slate-500 uppercase tracking-wider mb-1.5">Summary</p>
+          <p className="text-sm text-slate-300 leading-relaxed">{analysis.summary}</p>
         </div>
 
         {/* Recommended Response */}
         {analysis.recommendedResponse && (
-          <div className="bg-blue-50 rounded-xl p-4 border-2 border-blue-200">
-            <p className="text-sm text-blue-600 font-semibold mb-2">Recommended Response</p>
-            <p className="text-blue-800 font-medium">{analysis.recommendedResponse}</p>
+          <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-3">
+            <p className="text-[10px] text-cyan-400 uppercase tracking-wider mb-1">Recommended Response</p>
+            <p className="text-sm text-cyan-300 font-medium">{analysis.recommendedResponse}</p>
           </div>
         )}
 
         {/* Special Instructions */}
         {analysis.specialInstructions && (
-          <div className="bg-orange-50 rounded-xl p-4 border-2 border-orange-200">
-            <p className="text-sm text-orange-600 font-semibold mb-2 flex items-center gap-2">
-              <span>⚠️</span>
-              Special Instructions
-            </p>
-            <p className="text-orange-800 text-sm">{analysis.specialInstructions}</p>
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+            <p className="text-[10px] text-amber-400 uppercase tracking-wider mb-1">⚠ Special Instructions</p>
+            <p className="text-sm text-amber-200">{analysis.specialInstructions}</p>
           </div>
         )}
 
-        <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 text-sm text-purple-800">
-          ℹ️ {analysis.aiPowered 
-            ? 'This analysis is generated by Google Gemini AI and should be verified by the operator' 
-            : 'Fallback analysis used. AI service temporarily unavailable.'}
-        </div>
+        <p className="text-[10px] text-slate-600 leading-relaxed">
+          {analysis.aiPowered
+            ? 'Analysis generated by Google Gemini AI — verify before acting.'
+            : 'Fallback analysis — AI service temporarily unavailable.'}
+        </p>
       </div>
     </div>
   );

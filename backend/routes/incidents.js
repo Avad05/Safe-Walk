@@ -138,6 +138,41 @@ router.get('/', isAuthenticated, async (req, res) => {
   }
 });
 
+// GET /api/incidents/:id/status - Public endpoint for reporters to track their incident
+router.get('/:id/status', async (req, res) => {
+  try {
+    // Try to fetch with dispatch_info column first
+    let data, error;
+    ({ data, error } = await supabase
+      .from('incidents')
+      .select('status, dispatch_info, updated_at')
+      .eq('id', req.params.id)
+      .single());
+
+    // If dispatch_info column doesn't exist, fall back to status only
+    if (error && error.message && error.message.includes('dispatch_info')) {
+      ({ data, error } = await supabase
+        .from('incidents')
+        .select('status, updated_at')
+        .eq('id', req.params.id)
+        .single());
+    }
+
+    if (error || !data) {
+      return res.status(404).json({ error: 'Incident not found' });
+    }
+
+    res.json({
+      status: data.status,
+      dispatchInfo: data.dispatch_info || null,
+      updatedAt: data.updated_at
+    });
+  } catch (error) {
+    console.error('Error fetching incident status:', error);
+    res.status(500).json({ error: 'Failed to fetch incident status' });
+  }
+});
+
 // GET /api/incidents/:id - Get specific incident
 router.get('/:id', isAuthenticated, async (req, res) => {
   try {

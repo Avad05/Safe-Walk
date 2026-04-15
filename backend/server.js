@@ -15,6 +15,7 @@ import { supabase } from './config/supabase.js';
 import authRoutes from './routes/auth.js';
 import incidentRoutes from './routes/incidents.js';
 import vehicleRoutes from './routes/vehicles.js';
+import dispatchRoutes from './routes/dispatch.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -121,6 +122,7 @@ passport.deserializeUser(async (id, done) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/incidents', incidentRoutes);
 app.use('/api/vehicles', vehicleRoutes);
+app.use('/api/dispatch', dispatchRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

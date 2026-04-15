@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Mock vehicle data - in real app, this would be in a database
 // Mock vehicle data - in real app, this would be in a database
-const vehicles = [
+export const vehicles = [
   // Ambulances
   { 
     id: 1, 
